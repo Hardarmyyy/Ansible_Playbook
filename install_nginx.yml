@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index and install nginx
+    apt:
+      update_cache: yes
+      name: nginx
+      state: latest

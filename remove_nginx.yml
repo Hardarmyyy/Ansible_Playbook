@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index and remove nginx
+    apt:
+      update_cache: yes
+      name: nginx
+      state: absent
