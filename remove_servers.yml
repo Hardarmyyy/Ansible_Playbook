@@ -9,12 +9,12 @@
   become: true
   tasks:
 
-  - name: stop nginx server
+  - name: Stop Nginx server
     service:
       name: nginx
       state: stopped
 
-  - name: remove nginx server
+  - name: Remove nginx server
     apt:
       name: nginx
       state: absent
@@ -23,15 +23,14 @@
   become: true
   tasks:
 
-  - name: stop apache server
+
+  - name: Stop apache server
     service:
       name: apache2
       state: stopped
 
   - name: remove apache server
     apt:
-      name:
-        - apache2
-        - libapache2-mod-php
+      name: apache2
       state: absent
 

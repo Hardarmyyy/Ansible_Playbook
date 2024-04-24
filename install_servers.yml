@@ -10,12 +10,23 @@
   tasks:
 
   - name: update repository index and install nginx
+    tags: nginx
     apt:
       update_cache: yes
       name: nginx
       state: latest
 
+  - name: Copy default html file for website
+    tags: nginx,apache,apache2
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: www-data
+      group: www-data
+      mode: 0644
+
   - name: Start nginx server
+    tags: nginx
     service:
       enabled: yes
       name: nginx
@@ -26,6 +37,7 @@
   tasks:
 
   - name: update repository and install apache server
+    tags: apache,apache2
     apt:
       update_cache: yes
       name:
@@ -33,8 +45,18 @@
         - libapache2-mod-php
       state: latest
 
+  - name: Copy default html file for website
+    tags: nginx,apache,apache2
+    copy:
+      src: index_site.html
+      dest: /var/www/html/index.html
+      owner: www-data
+      group: www-data
+      mode: 0644
+
   - name: start apache server
+    tags: apache, apache2
     service:
-      enabled: yes
       name: apache2
       state: started
+      enabled: yes
