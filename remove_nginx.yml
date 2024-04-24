@@ -4,8 +4,13 @@
   become: true
   tasks:
 
-  - name: update repository index and remove nginx
+  - name: stop nginx
+    service:
+      name: nginx
+      state: stopped
+
+  - name: remove nginx
     apt:
-      update_cache: yes
       name: nginx
       state: absent
+

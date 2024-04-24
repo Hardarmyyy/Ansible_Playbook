@@ -9,3 +9,9 @@
       update_cache: yes
       name: nginx
       state: latest
+
+  - name: Start nginx server
+    service:
+      enabled: yes
+      name: nginx
+      state: started
