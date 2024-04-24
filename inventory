@@ -1,2 +1,5 @@
+[front_end_server]
 192.168.43.161
+
+[backend_server]
 192.168.43.114

@@ -1,0 +1,40 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+
+- hosts: front_end_server
+  become: true
+  tasks:
+
+  - name: update repository index and install nginx
+    apt:
+      update_cache: yes
+      name: nginx
+      state: latest
+
+  - name: Start nginx server
+    service:
+      enabled: yes
+      name: nginx
+      state: started
+
+- hosts: backend_server
+  become: true
+  tasks:
+
+  - name: update repository and install apache server
+    apt:
+      update_cache: yes
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+
+  - name: start apache server
+    service:
+      enabled: yes
+      name: apache2
+      state: started
