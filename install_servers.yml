@@ -4,17 +4,32 @@
   become: true
   tasks:
 
+  - name: Update system packages across all systems(Ubuntu)
+    tags: updateApt,updateDnf
+    apt:
+      update_cache: yes
+    changed_when: false #This will enable the task to run under the hood without showing changes on the playbook tasks
+
+
 
 - hosts: front_end_server
   become: true
   tasks:
 
-  - name: update repository index and install nginx
+  - name: Install nginx
     tags: nginx
     apt:
-      update_cache: yes
       name: nginx
       state: latest
+
+  - name: Copy default html file for website
+    tags: nginx,apache,apache2
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: www-data
+      group: www-data
+      mode: 0644
 
   - name: Install unzip
     package:
@@ -32,18 +47,20 @@
   - name: Start nginx server
     tags: nginx
     service:
-      enabled: yes
       name: nginx
       state: started
+      enabled: yes
+
+
+
 
 - hosts: backend_server
   become: true
   tasks:
 
-  - name: update repository and install apache server
+  - name: Install apache server(Ubuntu)
     tags: apache,apache2
     apt:
-      update_cache: yes
       name:
         - apache2
         - libapache2-mod-php
@@ -58,7 +75,7 @@
       group: www-data
       mode: 0644
 
-  - name: start apache server
+  - name: start apache server(Ubuntu)
     tags: apache, apache2
     service:
       name: apache2
