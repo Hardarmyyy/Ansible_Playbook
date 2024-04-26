@@ -1,0 +1,26 @@
+---
+
+- name: Install apache server(Ubuntu)
+  tags: apache,apache2
+  apt:
+    name:
+      - apache2
+      - libapache2-mod-php
+    state: latest
+
+- name: Copy default html file for website
+  tags: copy-files
+  copy:
+    src: index_site.html
+    dest: /var/www/html/index.html
+    owner: www-data
+    group: www-data
+    mode: 0644
+
+- name: start apache server(Ubuntu)
+  tags: start-apache
+  service:
+     name: apache2
+     state: started
+     enabled: yes
+

@@ -2,82 +2,17 @@
 
 - hosts: all
   become: true
-  tasks:
-
-  - name: Update system packages across all systems(Ubuntu)
-    tags: updateApt,updateDnf
-    apt:
-      update_cache: yes
-    changed_when: false #This will enable the task to run under the hood without showing changes on the playbook tasks
-
+  roles:
+    - base
 
 
 - hosts: front_end_server
   become: true
-  tasks:
-
-  - name: Install nginx
-    tags: nginx
-    apt:
-      name: nginx
-      state: latest
-
-  - name: Copy default html file for website
-    tags: nginx,apache,apache2
-    copy:
-      src: default_site.html
-      dest: /var/www/html/index.html
-      owner: www-data
-      group: www-data
-      mode: 0644
-
-  - name: Install unzip
-    package:
-      name: unzip
-
-  - name: Copy picknpay zip file from github
-    unarchive:
-      src: https://github.com/Hardarmyyy/pick-n-pay-app/archive/refs/heads/main.zip
-      dest: /usr/local/bin
-      remote_src: yes
-      owner: hardarmyyy
-      group: hardarmyyy
-      mode: 0644
-
-  - name: Start nginx server
-    tags: nginx
-    service:
-      name: nginx
-      state: started
-      enabled: yes
-
-
+  roles:
+    - front_end_servers
 
 
 - hosts: backend_server
   become: true
-  tasks:
-
-  - name: Install apache server(Ubuntu)
-    tags: apache,apache2
-    apt:
-      name:
-        - apache2
-        - libapache2-mod-php
-      state: latest
-
-  - name: Copy default html file for website
-    tags: nginx,apache,apache2
-    copy:
-      src: index_site.html
-      dest: /var/www/html/index.html
-      owner: www-data
-      group: www-data
-      mode: 0644
-
-  - name: start apache server(Ubuntu)
-    tags: apache, apache2
-    service:
-      name: apache2
-      state: started
-      enabled: yes
+  roles:
+    - backend_servers

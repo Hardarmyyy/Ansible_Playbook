@@ -1,0 +1,38 @@
+---
+
+- name: Install nginx
+  tags: nginx
+  apt:
+     name: nginx
+     state: latest
+
+- name: Copy default html file for website
+  tags: copy-files
+  copy:
+    src: default_site.html
+    dest: /var/www/html/index.html
+    owner: www-data
+    group: www-data
+    mode: 0644
+
+- name: Install unzip
+  package:
+    name: unzip
+
+- name: Copy picknpay zip file from github
+  unarchive:
+    src: https://github.com/Hardarmyyy/pick-n-pay-app/archive/refs/heads/main.zip
+    dest: /usr/local/bin
+    remote_src: yes
+    owner: hardarmyyy
+    group: hardarmyyy
+    mode: 0644
+
+- name: Start nginx server
+  tags: start-nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+
