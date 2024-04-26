@@ -1,36 +1,13 @@
 ---
 
-- hosts: all
-  become: true
-  tasks:
-
-
 - hosts: front_end_server
   become: true
-  tasks:
+  roles:
+    - stop_front_end_servers
 
-  - name: Stop Nginx server
-    service:
-      name: nginx
-      state: stopped
 
-  - name: Remove nginx server
-    apt:
-      name: nginx
-      state: absent
 
 - hosts: backend_server
   become: true
-  tasks:
-
-
-  - name: Stop apache server
-    service:
-      name: apache2
-      state: stopped
-
-  - name: remove apache server
-    apt:
-      name: apache2
-      state: absent
-
+  roles:
+    - stop_backend_servers

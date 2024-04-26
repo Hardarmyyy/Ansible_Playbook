@@ -1,0 +1,13 @@
+---
+
+- name: Stop Nginx server
+  tags: stop-nginx
+  service:
+    name: nginx
+    state: stopped
+
+- name: Remove nginx server
+  tags: stop-nginx
+  apt:
+    name: nginx
+    state: absent

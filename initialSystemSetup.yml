@@ -2,27 +2,5 @@
 
 - hosts: all
   become: true
-  tasks:
-
-  - name: Creating a super user across all systems
-    tags: always
-    user:
-      name: hardarmyyy
-      groups:
-        - root
-        - sudo
-
-  - name: Add ssh-key for the super user(hardarmyyy) across all systems
-    tags: always
-    authorized_key:
-      user: hardarmyyy
-      key: "{{ lookup('file','~/.ssh/ansible.pub') }}"
-
-  - name: Make the super user(hardarmyyy) a sudoer
-    tags: always
-    copy:
-      src: sudoer_hardarmyyy
-      dest: /etc/sudoers.d/hardarmyyy
-      owner: root
-      group: root
-      mode: 0440
+  roles:
+    - bootstrap_config
