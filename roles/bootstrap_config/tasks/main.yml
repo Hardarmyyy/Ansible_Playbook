@@ -3,24 +3,22 @@
 - name: Creating a super user across all systems
   tags: add-user
   user:
-    name: hardarmyyy
+    name: "{{ username }}"
     groups:
       - root
       - sudo
 
-- name: Add ssh-key for the super user(hardarmyyy) across all systems
+- name: Add ssh-key for the super user across all systems
   tags: copy-ssh-keys
   authorized_key:
-    user: hardarmyyy
-    key: "{{ lookup('file','~/.ssh/ansible.pub') }}"
+    user: "{{ username }}"
+    key: "{{ ssh_pub_key }}"
 
-- name: Make the super user(hardarmyyy) a sudoer
+- name: Make the super user a sudoer
   tags: sudo-rights
-  copy:
-    src: sudoer_hardarmyyy
-    dest: /etc/sudoers.d/hardarmyyy
-    owner: root
-    group: root
-    mode: 0440
+  lineinfile:
+    dest: /etc/sudoers
+    line: "{{ username }} ALL=(ALL) NOPASSWD:ALL"
+    state: present
 
 
