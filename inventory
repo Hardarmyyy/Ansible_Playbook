@@ -1,5 +1,5 @@
 [front_end_server]
 node3
 
-[backend_server]
+[apache_backend_server]
 node1

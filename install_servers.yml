@@ -12,7 +12,7 @@
     - front_end_servers
 
 
-- hosts: backend_server
+- hosts: apache_backend_server
   become: true
   roles:
-    - backend_servers
+    - apache_backend_servers

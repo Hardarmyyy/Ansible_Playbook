@@ -6,3 +6,9 @@
     update_cache: yes
   changed_when: false #This will enable the task to run under the hood without showing changes on the playbook tasks
 
+- name: Install nodejs and npm
+  tags: nodejs,npm
+  apt:
+    name:
+      - nodejs
+      - npm
