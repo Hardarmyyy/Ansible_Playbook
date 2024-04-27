@@ -28,7 +28,7 @@
     state: enabled
 
 - name: Allow SSH, HTTP and HTTPS on all systems
-  tags: allow-ssh,allow-http,allow-https
+  tags: allow-ssh,allow-http,allow-https,allow-jenkins
   ufw:
     rule: allow
     port: "{{ item }}"
@@ -37,3 +37,4 @@
     - 22
     - 80
     - 443
+    - 8080
