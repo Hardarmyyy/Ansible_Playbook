@@ -8,7 +8,7 @@ pipeline {
 	 stage('Add Ansible credentials') {
 
 		 steps {
-			 withCredentials([sshUserPrivateKey(credentialsId: 'Ansible_Private_key' )]) {
+			 withCredentials([sshUserPrivateKey(credentialsId: 'f336b10b-519d-48d5-bc09-bd1faa01741f' )]) {
 			 echo "Credentials added for ssh to remote systems ..."
 			}
 		 }
