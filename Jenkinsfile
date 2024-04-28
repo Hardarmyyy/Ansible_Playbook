@@ -18,6 +18,7 @@ pipeline {
 		 steps {
 			 withCredentials([sshCredentials(credentialsId: 'Ansible_Private_key' )]) {
 			 echo "Credentials added for ssh to remote systems ..."
+			}
 		 }
 
 	 }
@@ -53,5 +54,4 @@ pipeline {
 
   }
 
-}
 }
