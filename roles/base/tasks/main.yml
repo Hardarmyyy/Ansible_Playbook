@@ -6,9 +6,12 @@
     update_cache: yes
   changed_when: false #This will enable the task to run under the hood without showing changes on the playbook tasks
 
-- name: Install nodejs and npm
+- name: Download node package repository across all systems (Ubuntu)
+  tags: node
+  shell: |
+    sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+
+- name: Install nodejs and npm across all systems (Ubuntu)
   tags: nodejs,npm
-  apt:
-    name:
-      - nodejs
-      - npm
+  shell: |
+    sudo apt-get install nodejs -y
