@@ -4,14 +4,6 @@ pipeline {
 
   stages {
 	
-	 stage('Checkout') {
-
-		steps {
-			git 'https://github.com/Hardarmyyy/Ansible_Playbook'
-			echo "Connecting to Github repository to source for code ..."
-		}
-	
-	 }
 
 	 stage('Add Ansible credentials') {
 
