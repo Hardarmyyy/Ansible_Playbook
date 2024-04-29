@@ -8,7 +8,7 @@ pipeline {
 	 stage('Checkout') {
 
 		 steps {
-			 echo 'Soruce code from github repository'
+			 echo 'Source code from github repository'
 		 }
 
 	 }
