@@ -14,6 +14,8 @@ pipeline {
 	 stage('Checkout') {
 
 		 steps {
+			git branch: 'main', url: 'https://github.com/Hardarmyyy/Ansible_Playbook.git'
+
 			 echo 'Source code from github repository'
 		 }
 
