@@ -34,28 +34,19 @@ pipeline {
 			 disableHostKeyChecking: true
                ]) 
             }		
-         }
+	}
 
   }
 
   post {
-	
-	 stage ('always') {
-
-		 steps {
-			archiveArtifacts artifacts: '**/*', excludes: 'temp/**, *.log', allowEmptyArchive: true
-		 }
-	 }
-
-	 stage ('cleanup') {
-
-                 steps {
-                        cleanWs()
-                 }
-         } 
 
 	 success {
-		 echo 'Build successful! Artifacts archived.'
+		
+		archiveArtifacts artifacts: '**/*', excludes: 'temp/**, *.log', allowEmptyArchive: true
+
+                 echo 'Build successful! Artifacts archived.'
+
+		cleanWs()
 	 }
 
 	 failure {
