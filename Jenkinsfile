@@ -13,6 +13,13 @@ pipeline {
 
 	 }
 
+	stage('Ansible Credentials') {
+		
+		steps {
+			echo 'SSH connection to ansible'
+		}
+	}
+
   }
 
   post {
