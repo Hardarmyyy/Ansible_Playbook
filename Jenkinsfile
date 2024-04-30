@@ -26,7 +26,8 @@ pipeline {
 		 steps {
 			 ansiblePlaybook([ 
 			 inventory: 'inventory',
-			 playbook: 'initialSystemSetup.yml',
+			 playbook: 'install_Servers.yml',
+			 tags: 'updateSystem'
 			 installation: 'ansible',
 			 colorized: true,
 			 credentialsId: 'ansible-private-key',
