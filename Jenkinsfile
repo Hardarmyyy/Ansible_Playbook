@@ -4,6 +4,12 @@ pipeline {
 
   stages {
 
+	 stage ('clean Workspace') {
+
+		 steps {
+			cleanWs()
+		 }
+         }	
 
 	 stage('Checkout') {
 
