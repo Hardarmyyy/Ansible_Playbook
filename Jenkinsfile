@@ -23,9 +23,12 @@ pipeline {
 
 	stage('Ansible Credentials') {
 		
-		steps {
-			echo 'SSH connection to ansible'
-		}
+                 steps {
+				 withCredentials([sshUserPrivateKey( credentialsId: 'Ansible_Private_Key' )]) {
+					 echo 'SSH connection to ansible'
+				 }
+                }
+
 	}
 
   }
