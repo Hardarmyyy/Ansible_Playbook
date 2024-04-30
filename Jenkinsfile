@@ -23,13 +23,17 @@ pipeline {
 
 	stage('Ansible Credentials') {
 		
-                 steps {
-				 withCredentials([sshUserPrivateKey( credentialsId: 'Ansible_Private_Key' )]) {
-					 echo 'SSH connection to ansible'
-				 }
-                }
-
-	}
+		 steps {
+			 ansiblePlaybook([ 
+			 inventory: 'inventory',
+			 playbook: 'initialSystemSetup.yml',
+			 installation: 'ansible',
+			 colorized: true,
+			 credentialsId: 'ansible-private-key',
+			 disableHostKeyChecking: true
+               ]) 
+            }		
+         }
 
   }
 
