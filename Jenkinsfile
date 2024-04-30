@@ -26,7 +26,7 @@ pipeline {
 		 steps {
 			 ansiblePlaybook([ 
 			 inventory: 'inventory',
-			 playbook: 'install_Servers.yml',
+			 playbook: 'install_servers.yml',
 			 tags: 'updateSystem',
 			 installation: 'ansible',
 			 colorized: true,
