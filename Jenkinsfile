@@ -21,7 +21,7 @@ pipeline {
 
 	 }
 
-	stage('Ansible Credentials') {
+	stage('Ansible Credentials and Deploy') {
 		
 		 steps {
 			 ansiblePlaybook([ 
