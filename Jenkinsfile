@@ -39,6 +39,17 @@ pipeline {
   }
 
   post {
+	
+	 stage ('Archive') {
+
+		 steps {
+			archiveArtifacts artifacts: '**/*', exclude: 'temp/**, *.log', allowEmptyArchive: true
+		 }
+	 }
+
+	 steps {
+                 cleanWs()
+         }
 
 	 success {
 		 echo 'Build successful! Artifacts archived.'
