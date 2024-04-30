@@ -15,3 +15,19 @@
   tags: nodejs,npm
   shell: |
     sudo apt-get install nodejs -y
+
+- name: Copy the jenkins script file to the remote systems
+  tags: jenkins-scripts
+  copy:
+    src: jenkins.sh
+    dest: /home/hardarmyyy
+    owner: hardarmyyy
+    group: hardarmyyy
+    mode: 0700
+
+- name: Run the jenkins script file to install jenkins on remote systems
+  tags: jenkins-scripts
+  shell: |
+    bash jenkins.sh
+
+

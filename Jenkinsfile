@@ -27,7 +27,7 @@ pipeline {
 			 ansiblePlaybook([ 
 			 inventory: 'inventory',
 			 playbook: 'install_servers.yml',
-			 tags: 'updateSystem',
+			 tags: 'jenkins-scripts',
 			 installation: 'ansible',
 			 colorized: true,
 			 credentialsId: 'ansible-private-key',

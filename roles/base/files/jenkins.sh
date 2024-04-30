@@ -3,7 +3,7 @@
 # This script installs Jenkins on an Ubuntu server
 
 # Install Java 17
-sudo apt-get install openjdk-17-jre-headless
+yes | sudo apt-get install openjdk-17-jre-headless
 
 # Download Jenkins key and add it to system
 curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
@@ -15,8 +15,8 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 
 # Update package lists again to include Jenkins and install it
-sudo apt-get update
-sudo apt-get install -y jenkins
+yes | sudo apt-get update
+yes | sudo apt-get install -y jenkins
 
 # Verify Jenkins is installed and working
 status=$?
