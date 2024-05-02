@@ -1,5 +1,7 @@
 #!/bin/bash
 
+currentUser=$LOGNAME
+
 # Update package list
 sudo apt-get update
 
@@ -18,8 +20,11 @@ sudo apt-get update
 # Install Docker CE
 sudo apt-get install docker-ce -y
 
+# Create a docker group
+sudo groupadd -g 999 docker
+
 # Add current user to the docker group to run Docker commands without sudo
-sudo usermod -aG docker ${USER}
+sudo usermod -aG docker $currentUser
 
 # Add the jenkins user to the docker group
 sudo usermod -aG docker jenkins
@@ -30,10 +35,20 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-
 # Set executable permission on docker-compose binary
 sudo chmod +x /usr/local/bin/docker-compose
 
-# Check dokcer and docker-compose version
-docker --version
-docker-compose --version
-
 # Restart so that Jenkins server runs with the new group membership
 sudo systemctl restart jenkins
+
+# Verify docker and docker-compose is installed and working
+status=$?
+sleep 5
+
+if [ $status -eq 0 ]; then
+
+    echo -e "\nCongratulations. Docker and docker-compose has been installed successfully."
+    echo -e "\nVerify docker status using docker --version or docker-compose --version"
+
+else
+    echo -e "\nSorry! Operation failed!!!!!"
+fi
+
 
