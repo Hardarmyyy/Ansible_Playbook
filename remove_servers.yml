@@ -1,13 +1,14 @@
 ---
 
-- hosts: front_end_server
-  become: true
-  roles:
-    - stop_front_end_servers
-
-
 
 - hosts: apache_backend_server
   become: true
   roles:
     - stop_apache_backend_servers
+
+
+- hosts: front_end_server
+  become: true
+  roles:
+    - stop_front_end_servers
+
