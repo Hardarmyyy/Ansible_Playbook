@@ -30,4 +30,17 @@
   shell: |
     bash jenkins.sh
 
+- name: Copy the docker script file to the remote systems
+  tags: docker-scripts
+  copy:
+    src: docker.sh
+    dest: /home/hardarmyyy
+    owner: hardarmyyy
+    group: hardarmyyy
+    mode: 0700
+
+- name: Run the docker script file to install docker on remote systems
+  tags: docker-scripts
+  shell: |
+    bash docker.sh
 
