@@ -6,7 +6,9 @@
     name: "{{ username }}"
     groups:
       - root
-      - sudo
+      - "{{ sudo_rights}}"
+  vars:
+    sudo_rights: "{{ 'sudo' if ansible_distribution == 'Ubuntu' else 'wheel' }}" #conditional statement for sudo
 
 - name: Add ssh-key for the super user across all systems
   tags: copy-ssh-keys
@@ -21,13 +23,13 @@
     line: "{{ username }} ALL=(ALL) NOPASSWD:ALL"
     state: present
 
-
-- name: Enable UFW on all systems
+- name: Enable UFW on all systems(Ubuntu)
   tags: enable-ufw
   ufw:
     state: enabled
+  when: ansible_distribution == "Ubuntu"
 
-- name: Allow SSH, HTTP and HTTPS on all systems
+- name: Allow SSH, HTTP and HTTPS on all systems(Ubuntu)
   tags: allow-ssh,allow-http,allow-https,allow-jenkins
   ufw:
     rule: allow
@@ -38,3 +40,24 @@
     - 80
     - 443
     - 8080
+  when: ansible_distribution == "Ubuntu"
+
+- name: Enable firewalld  on all systems(OracleLinux)
+  tags: enable-firewalld
+  firewalld:
+    state: enabled
+  when: ansible_distribution == "OracleLinux"
+
+- name: Allow SSH, HTTP and HTTPS on all systems(OracleLinux)
+  tags: allow-ssh,allow-http,allow-https,allow-jenkins
+  firewalld:
+    port: "{{ item }}/tcp"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  loop:
+    - 22
+    - 80
+    - 443
+    - 8080
+  when: ansible_distribution == "OracleLinux"
