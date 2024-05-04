@@ -1,5 +1,15 @@
-[front_end_server]
+[frontend_server]
 node3
+node4
 
-[apache_backend_server]
+[backend_server]
 node1
+node5
+
+[apache_server]
+node1
+node4
+
+[nginx_server]
+node3
+node5

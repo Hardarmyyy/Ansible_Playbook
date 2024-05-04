@@ -6,13 +6,13 @@
     - base
 
 
-- hosts: front_end_server
+- hosts: frontend_server
   become: true
   roles:
     - front_end_servers
 
 
-- hosts: apache_backend_server
+- hosts: backend_server
   become: true
   roles:
     - apache_backend_servers
