@@ -5,30 +5,75 @@
   apt:
     update_cache: yes
   changed_when: false #This will enable the task to run under the hood without showing changes on the playbook tasks
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Update system packages across all systems(OracleLinux)
+  tags: updateSystem
+  dnf:
+    update_cache: yes
+  changed_when: false #This will enable the task to run under the hood without showing changes on the playbook tasks
+  when: ansible_distribution == "OracleLinux"
+
 
 - name: Download node package repository across all systems (Ubuntu)
   tags: node
   shell: |
     sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+  when: ansible_distribution == "Ubuntu"
+  register: nodejs_debian_repository
+
+- name: Download node package repository across all systems (OracleLinux)
+  tags: node
+  shell: |
+    sudo curl -sL https://rpm.nodesource.com/setup_20.x | sudo -E bash -
+  when: ansible_distribution == "OracleLinux"
+  register: nodejs_rpm_repository
 
 - name: Install nodejs and npm across all systems (Ubuntu)
   tags: nodejs,npm
   shell: |
     sudo apt-get install nodejs -y
+  when: ansible_distribution == "Ubuntu" and nodejs_debian_repository.changed
+
+
+- name: Install nodejs and npm across all systems (OracleLinux)
+  tags: nodejs,npm
+  shell: |
+    sudo dnf install nodejs -y
+  when: ansible_distribution == "OracleLinux" and nodejs_rpm_repository.changed
+
+
+- name: Check if file exists on the remote systems
+  tags: jenkins-scripts
+  stat:
+    path: "{{ jenkins_file }}"
+  register: script_file
+  vars:
+    jenkins_file: "{{ '/home/hardarmyyy/jenkins.sh' if ansible_distribution == 'Ubuntu' else '/home/hardarmyyy/jenkins_oracle.sh' }}" 
+
 
 - name: Copy the jenkins script file to the remote systems
   tags: jenkins-scripts
   copy:
-    src: jenkins.sh
+    src: "{{ jenkins_file }}"
     dest: /home/hardarmyyy
     owner: hardarmyyy
     group: hardarmyyy
     mode: 0700
+  vars:
+    jenkins_file: "{{ 'jenkins.sh' if ansible_distribution == 'Ubuntu' else 'jenkins_oracle.sh' }}"
+  changed_when: not script_file.stat.exists
+
 
 - name: Run the jenkins script file to install jenkins on remote systems
   tags: jenkins-scripts
   shell: |
-    bash jenkins.sh
+    bash "{{ jenkins_file }}"
+  vars:
+    jenkins_file: "{{ 'jenkins.sh' if ansible_distribution == 'Ubuntu' else 'jenkins_oracle.sh'}}"
+  changed_when: not script_file.stat.exists
+
 
 - name: Copy the docker script file to the remote systems
   tags: docker-scripts
@@ -38,6 +83,7 @@
     owner: hardarmyyy
     group: hardarmyyy
     mode: 0700
+
 
 - name: Run the docker script file to install docker on remote systems
   tags: docker-scripts
