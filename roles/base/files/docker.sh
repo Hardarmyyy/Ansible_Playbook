@@ -1,7 +1,5 @@
 #!/bin/bash
 
-currentUser=$LOGNAME
-
 # Update package list
 sudo apt-get update
 
@@ -20,11 +18,8 @@ sudo apt-get update
 # Install Docker CE
 sudo apt-get install docker-ce -y
 
-# Create a docker group
-sudo groupadd -g 999 docker
-
-# Add current user to the docker group to run Docker commands without sudo
-sudo usermod -aG docker $currentUser
+# Create docker group
+sudo groupadd -g 972 docker
 
 # Add the jenkins user to the docker group
 sudo usermod -aG docker jenkins

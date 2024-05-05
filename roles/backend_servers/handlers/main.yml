@@ -1,0 +1,19 @@
+---
+
+- name: Restart apache2 server
+  service:
+    name: apache2
+    state: restarted
+  when: ansible_distribution == "Ubuntu"
+
+- name: Restart apache2 server
+  service:
+    name: httpd
+    state: restarted
+  when: ansible_distribution == "OracleLinux"
+
+
+- name: Restart nginx server
+  service:
+    name: nginx
+    state: restarted

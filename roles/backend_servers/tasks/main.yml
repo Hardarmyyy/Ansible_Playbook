@@ -1,0 +1,46 @@
+---
+
+- name: Check if pm2 is installed
+  tags: pm2
+  npm:
+    name: pm2
+    global: yes
+    state: present
+  register: pm2_result
+
+- name: Install pm2
+  tags: pm2
+  npm:
+    name: pm2
+    global: yes
+    state: present
+  when: not 'installed' in pm2_result
+
+
+- name: Copy default html file for website(Ubuntu apache2)
+  tags: copy-backend
+  synchronize:
+    src: index_site.html
+    dest: /var/www/html/index.html
+  notify: Restart apache2 server
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Copy default html file for website(OracleLinux httpd)
+  tags: copy-backend
+  synchronize:
+    src: index_site.html
+    dest: /var/www/html/index.html
+  notify: Restart httpd server
+  when: ansible_distribution == "OracleLinux"
+
+
+- name: Copy default html file for website(OracleLinux Nginx)
+  tags: copy-backend
+  synchronize:
+    src: index_site.html
+    dest: /var/www/html/index.html
+  notify: Restart nginx server
+  when: ansible_distribution == "OracleLinux"
+
+

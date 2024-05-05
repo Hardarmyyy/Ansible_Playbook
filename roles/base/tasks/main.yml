@@ -23,6 +23,7 @@
   when: ansible_distribution == "Ubuntu"
   register: nodejs_debian_repository
 
+
 - name: Download node package repository across all systems (OracleLinux)
   tags: node
   shell: |
@@ -30,21 +31,30 @@
   when: ansible_distribution == "OracleLinux"
   register: nodejs_rpm_repository
 
+
+- name: Check if nodejs is installed on the system
+  tags: nodejs,npm
+  package:
+    name: nodejs
+    state: present
+  register: node
+
+
 - name: Install nodejs and npm across all systems (Ubuntu)
   tags: nodejs,npm
   shell: |
     sudo apt-get install nodejs -y
-  when: ansible_distribution == "Ubuntu" and nodejs_debian_repository.changed
+  when: ansible_distribution == "Ubuntu" and nodejs_debian_repository.changed and 'installed' not in node
 
 
 - name: Install nodejs and npm across all systems (OracleLinux)
   tags: nodejs,npm
   shell: |
     sudo dnf install nodejs -y
-  when: ansible_distribution == "OracleLinux" and nodejs_rpm_repository.changed
+  when: ansible_distribution == "OracleLinux" and nodejs_rpm_repository.changed and 'installed' not in node
 
 
-- name: Check if file exists on the remote systems
+- name: Check if jenkins script file exists on the remote systems
   tags: jenkins-scripts
   stat:
     path: "{{ jenkins_file }}"
@@ -63,7 +73,7 @@
     mode: 0700
   vars:
     jenkins_file: "{{ 'jenkins.sh' if ansible_distribution == 'Ubuntu' else 'jenkins_oracle.sh' }}"
-  changed_when: not script_file.stat.exists
+  when: not script_file.stat.exists
 
 
 - name: Run the jenkins script file to install jenkins on remote systems
@@ -72,21 +82,49 @@
     bash "{{ jenkins_file }}"
   vars:
     jenkins_file: "{{ 'jenkins.sh' if ansible_distribution == 'Ubuntu' else 'jenkins_oracle.sh'}}"
-  changed_when: not script_file.stat.exists
+  when: not script_file.stat.exists
 
 
-- name: Copy the docker script file to the remote systems
+- name: Check if docker script exists on the remote systems
   tags: docker-scripts
-  copy:
+  stat:
+    path: "{{ docker_file }}"
+  register: docker_file
+  vars:
+    docker_file: "{{ '/home/hardarmyyy/docker.sh' if ansible_distribution == 'Ubuntu' else '/home/hardarmyyy/oracle_docker.sh' }}"
+
+
+- name: Copy the docker script file to the remote systems(Ubuntu)
+  tags: docker-scripts
+  synchronize: # The synchronize module is used to copy files while preserving their permissions
     src: docker.sh
     dest: /home/hardarmyyy
-    owner: hardarmyyy
-    group: hardarmyyy
-    mode: 0700
+  when: ansible_distribution == 'Ubuntu' and not docker_file.stat.exists
+
+
+- name: Copy the docker script file to the remote systems(OracleLinux)
+  tags: docker-scripts
+  synchronize: # The synchronize module is used to copy files while preserving their permissions
+    src: oracle_docker.sh
+    dest: /home/hardarmyyy
+  when: ansible_distribution == 'OracleLinux' and not docker_file.stat.exists
 
 
 - name: Run the docker script file to install docker on remote systems
   tags: docker-scripts
   shell: |
-    bash docker.sh
+    bash "{{ docker_script_file }}"
+  vars:
+    docker_script_file: "{{ 'docker.sh' if ansible_distribution == 'Ubuntu' else 'oracle_docker.sh'}}"
+  when: not docker_file.stat.exists
 
+- name: Add the user to docker group to run docker commands without sudo
+  tags: docker-scripts
+  user:
+    name: hardarmyyy
+    groups:
+      - docker
+    append: yes
+    state: present
+  when: not docker_file.stat.exists
+  notify: Restart docker service

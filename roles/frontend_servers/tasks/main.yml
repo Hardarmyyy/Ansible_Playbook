@@ -1,0 +1,44 @@
+---
+
+- name: Copy default html file for website(Ubuntu Nginx)
+  tags: copy-frontend
+  synchronize:
+    src: default_site.html
+    dest: /var/www/html/index.html
+  notify: Restart nginx server
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Copy default html file for website(Ubuntu apache2)
+  tags: copy-frontend
+  synchronize:
+    src: default_site.html
+    dest: /var/www/html/index.html
+  notify: Restart apache2 server
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Copy default html file for website(OracleLinux apache)
+  tags: copy-frontend
+  synchronize:
+    src: default_site.html
+    dest: /var/www/html/index.html
+  when: ansible_distribution == "OracleLinux"
+  notify: Restart httpd server
+
+
+- name: Install unzip
+  package:
+    name: unzip
+
+
+- name: Copy picknpay zip file from github
+  unarchive:
+    src: https://github.com/Hardarmyyy/pick-n-pay-app/archive/refs/heads/main.zip
+    dest: /usr/local/bin
+    remote_src: yes
+    owner: hardarmyyy
+    group: hardarmyyy
+    mode: 0644
+
+

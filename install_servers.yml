@@ -5,14 +5,23 @@
   roles:
     - base
 
+- hosts: apache_server
+  become: true
+  roles:
+    - apache_servers
+
+- hosts: nginx_server
+  become: true
+  roles:
+    - nginx_servers
 
 - hosts: frontend_server
   become: true
   roles:
-    - front_end_servers
+    - frontend_servers
 
 
 - hosts: backend_server
   become: true
   roles:
-    - apache_backend_servers
+    - backend_servers
