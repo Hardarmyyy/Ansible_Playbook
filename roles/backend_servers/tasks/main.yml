@@ -11,7 +11,7 @@
 - name: Copy default html file for website(Ubuntu apache2)
   tags: copy-backend
   synchronize:
-    src: index_site.html
+    src: index_site_apache.html
     dest: /var/www/html/index.html
   notify: Restart apache2 server
   when: ansible_distribution == "Ubuntu"
@@ -20,7 +20,7 @@
 - name: Copy default html file for website(OracleLinux Nginx)
   tags: copy-backend-nginx-oracle
   synchronize:
-    src: index_site.html
+    src: index_site_nginx.html
     dest: /usr/share/nginx/html/index.html
   notify: Restart nginx server
   when: ansible_distribution == "OracleLinux"

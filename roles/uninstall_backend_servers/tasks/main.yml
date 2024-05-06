@@ -16,8 +16,17 @@
   when: ansible_distribution == "Ubuntu"
 
 
+- name: Check nginx installation(OracleLinux)
+  tags: check-nginx
+  dnf:
+    name: nginx
+    state: present
+  register: nginx_result
+  when: ansible_distribution == "OracleLinux"
+
+
 - name: Stop Nginx server(OracleLinux)
-  tags: stop-nginx
+  tags: stop-nginx-oracle
   service:
     name: nginx
     state: stopped
