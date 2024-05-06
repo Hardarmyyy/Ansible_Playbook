@@ -5,10 +5,12 @@ node4
 [backend_server]
 node1
 node5
+node6
 
 [apache_server]
 node1
 node4
+node6
 
 [nginx_server]
 node3

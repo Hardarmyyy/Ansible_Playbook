@@ -21,8 +21,16 @@
   tags: copy-backend-nginx-oracle
   synchronize:
     src: index_site_nginx.html
-    dest: /usr/share/nginx/html/index.html
+    dest: /usr/share/nginx/html/index.html # The default file for nginx root server on oracleLinux is different from ubuntu
   notify: Restart nginx server
   when: ansible_distribution == "OracleLinux"
 
+
+- name: Copy default html file for website(OracleLinux httpd)
+  tags: copy-backend-httpd-oracle
+  synchronize:
+    src: index_site_apache.html
+    dest: /var/www/html/index.html
+  notify: Restart httpd server
+  when: ansible_distribution == "OracleLinux"
 
