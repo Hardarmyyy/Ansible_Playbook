@@ -1,0 +1,7 @@
+---
+
+- hosts: frontend_server
+  become: true
+  roles:
+    - frontend_servers
+

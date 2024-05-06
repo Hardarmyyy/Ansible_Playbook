@@ -1,0 +1,34 @@
+---
+
+- name: Stop apache server(Ubuntu apache)
+  tags: stop-apache2
+  service:
+    name: apache2
+    state: stopped
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Uninstall apache server(Ubuntu apache)
+  tags: uninstall-apache2
+  apt:
+    name: apache2
+    state: absent
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Stop Nginx server(OracleLinux)
+  tags: stop-nginx
+  service:
+    name: nginx
+    state: stopped
+  when: ansible_distribution == "OracleLinux"
+
+
+- name: Uninstall Nginx server(OracleLinux)
+  tags: uninstall-nginx
+  dnf:
+    name: nginx
+    state: absent
+  when: ansible_distribution == "OracleLinux"
+
+

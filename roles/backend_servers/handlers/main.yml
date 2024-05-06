@@ -6,7 +6,8 @@
     state: restarted
   when: ansible_distribution == "Ubuntu"
 
-- name: Restart apache2 server
+
+- name: Restart httpd server
   service:
     name: httpd
     state: restarted

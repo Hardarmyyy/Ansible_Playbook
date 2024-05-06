@@ -15,13 +15,4 @@
   roles:
     - nginx_servers
 
-- hosts: frontend_server
-  become: true
-  roles:
-    - frontend_servers
 
-
-- hosts: backend_server
-  become: true
-  roles:
-    - backend_servers
