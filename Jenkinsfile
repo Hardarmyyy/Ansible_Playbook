@@ -26,8 +26,8 @@ pipeline {
 		 steps {
 			 ansiblePlaybook([ 
 			 inventory: 'inventory',
-			 playbook: 'install_servers.yml',
-			 tags: 'docker-scripts',
+			 playbook: 'initialSystemSetup.yml',
+			 limit: 'node7',
 			 installation: 'ansible',
 			 colorized: true,
 			 credentialsId: 'ansible-private-key',

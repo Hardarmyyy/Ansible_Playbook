@@ -54,37 +54,6 @@
   when: ansible_distribution == "OracleLinux" and nodejs_rpm_repository.changed and 'installed' not in node
 
 
-- name: Check if jenkins script file exists on the remote systems
-  tags: jenkins-scripts
-  stat:
-    path: "{{ jenkins_file }}"
-  register: script_file
-  vars:
-    jenkins_file: "{{ '/home/hardarmyyy/jenkins.sh' if ansible_distribution == 'Ubuntu' else '/home/hardarmyyy/jenkins_oracle.sh' }}" 
-
-
-- name: Copy the jenkins script file to the remote systems
-  tags: jenkins-scripts
-  copy:
-    src: "{{ jenkins_file }}"
-    dest: /home/hardarmyyy
-    owner: hardarmyyy
-    group: hardarmyyy
-    mode: 0700
-  vars:
-    jenkins_file: "{{ 'jenkins.sh' if ansible_distribution == 'Ubuntu' else 'jenkins_oracle.sh' }}"
-  when: not script_file.stat.exists
-
-
-- name: Run the jenkins script file to install jenkins on remote systems
-  tags: jenkins-scripts
-  shell: |
-    bash "{{ jenkins_file }}"
-  vars:
-    jenkins_file: "{{ 'jenkins.sh' if ansible_distribution == 'Ubuntu' else 'jenkins_oracle.sh'}}"
-  when: not script_file.stat.exists
-
-
 - name: Check if docker script exists on the remote systems
   tags: docker-scripts
   stat:

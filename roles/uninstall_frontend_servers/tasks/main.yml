@@ -16,6 +16,23 @@
   when: ansible_distribution == "Ubuntu"
 
 
+- name: Stop apache server(Ubuntu apache)
+  tags: stop-apache2
+  service:
+    name: apache2
+    state: stopped
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Uninstall apache server(Ubuntu apache)
+  tags: uninstall-apache2
+  apt:
+    name: apache2
+    state: absent
+  when: ansible_distribution == "Ubuntu"
+
+
+
 - name: Stop httpd server(OracleLinux)
   tags: stop-httpd
   service:

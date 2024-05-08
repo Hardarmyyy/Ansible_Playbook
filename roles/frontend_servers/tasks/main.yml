@@ -9,6 +9,15 @@
   when: ansible_distribution == "Ubuntu"
 
 
+- name: Copy default html file for website(Ubuntu apache)
+  tags: copy-frontend
+  synchronize:
+    src: default_site_apache.html
+    dest: /var/www/html/index.html
+  when: ansible_distribution == "Ubuntu"
+  notify: Restart apache2 server
+
+
 - name: Copy default html file for website(OracleLinux apache)
   tags: copy-frontend
   synchronize:
