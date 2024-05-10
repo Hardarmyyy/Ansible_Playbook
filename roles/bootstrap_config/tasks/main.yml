@@ -4,24 +4,38 @@
   tags: add-user
   user:
     name: "{{ username }}"
+    createhome: yes
+    shell: /bin/bash
     groups:
       - root
       - "{{ sudo_rights}}"
   vars:
     sudo_rights: "{{ 'sudo' if ansible_distribution == 'Ubuntu' else 'wheel' }}" #conditional statement for sudo
 
-- name: Add ssh-key for the super user across all systems
-  tags: copy-ssh-keys
+
+- name: Add ansible ssh-key for ssh connection to remote systems
+  tags: ansible-ssh-keys
   authorized_key:
     user: "{{ username }}"
     key: "{{ ssh_pub_key }}"
 
+
+- name: Add jenkins ssh-key for ssh connection to remote systems as agents/nodes
+  tags: jenkins-ssh-keys
+  authorized_key:
+    user: "{{ username }}"
+    key: "{{ jenkins_ssh_pub_key }}"
+
+
 - name: Make the super user a sudoer
   tags: sudo-rights
-  lineinfile:
-    dest: /etc/sudoers
-    line: "{{ username }} ALL=(ALL) NOPASSWD:ALL"
-    state: present
+  copy:
+    src: sudoer_file
+    dest: /etc/sudoers.d/"{{ username }}"
+    owner: root
+    group: root
+    mode: 0440
+
 
 - name: Enable UFW on all systems(Ubuntu)
   tags: enable-ufw
@@ -29,8 +43,9 @@
     state: enabled
   when: ansible_distribution == "Ubuntu"
 
+
 - name: Allow SSH, HTTP and HTTPS on all systems(Ubuntu)
-  tags: allow-ssh,allow-http,allow-https,allow-jenkins
+  tags: allow-ssh,allow-http,allow-https
   ufw:
     rule: allow
     port: "{{ item }}"
@@ -39,8 +54,8 @@
     - 22
     - 80
     - 443
-    - 8080
   when: ansible_distribution == "Ubuntu"
+
 
 - name: Enable firewalld  on all systems(OracleLinux)
   tags: enable-firewalld
@@ -48,8 +63,9 @@
     state: enabled
   when: ansible_distribution == "OracleLinux"
 
+
 - name: Allow SSH, HTTP and HTTPS on all systems(OracleLinux)
-  tags: allow-ssh,allow-http,allow-https,allow-jenkins
+  tags: allow-ssh,allow-http,allow-https
   firewalld:
     port: "{{ item }}/tcp"
     permanent: yes
@@ -59,5 +75,4 @@
     - 22
     - 80
     - 443
-    - 8080
   when: ansible_distribution == "OracleLinux"
