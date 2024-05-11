@@ -1,6 +1,8 @@
 pipeline {
 
-  agent any
+  agent  {
+		label "agent-node-1"
+	 }
 
   stages {
 
@@ -26,7 +28,7 @@ pipeline {
 		 steps {
 			 ansiblePlaybook([ 
 			 inventory: 'inventory',
-			 playbook: 'initialSystemSetup.yml',
+			 playbook: 'install_servers.yml',
 			 limit: 'node1',
 			 installation: 'ansible',
 			 colorized: true,
