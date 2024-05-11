@@ -27,7 +27,7 @@ pipeline {
 			 ansiblePlaybook([ 
 			 inventory: 'inventory',
 			 playbook: 'initialSystemSetup.yml',
-			 limit: 'node4,node5',
+			 limit: 'node6',
 			 installation: 'ansible',
 			 colorized: true,
 			 credentialsId: 'ansible-private-key',
