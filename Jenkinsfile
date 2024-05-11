@@ -1,8 +1,6 @@
 pipeline {
 
-  agent  {
-		label "agent-node-1"
-	 }
+  agent any
 
   stages {
 
@@ -28,8 +26,8 @@ pipeline {
 		 steps {
 			 ansiblePlaybook([ 
 			 inventory: 'inventory',
-			 playbook: 'uninstall_servers.yml',
-			 limit: 'node1',
+			 playbook: 'initialSystemSetup.yml',
+			 limit: 'node3',
 			 installation: 'ansible',
 			 colorized: true,
 			 credentialsId: 'ansible-private-key',
