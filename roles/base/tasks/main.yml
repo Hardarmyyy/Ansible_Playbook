@@ -16,11 +16,19 @@
   when: ansible_distribution == "OracleLinux"
 
 
+- name: Check if nodejs is installed on the system
+  tags: nodejs,npm
+  package:
+    name: nodejs
+    state: present
+  register: node
+
+
 - name: Download node package repository across all systems (Ubuntu)
   tags: node
   shell: |
     sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_distribution == "Ubuntu" and "installed" not in node
   register: nodejs_debian_repository
 
 
@@ -28,16 +36,8 @@
   tags: node
   shell: |
     sudo curl -sL https://rpm.nodesource.com/setup_20.x | sudo -E bash -
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_distribution == "OracleLinux" and "installed" not in node
   register: nodejs_rpm_repository
-
-
-- name: Check if nodejs is installed on the system
-  tags: nodejs,npm
-  package:
-    name: nodejs
-    state: present
-  register: node
 
 
 - name: Install nodejs and npm across all systems (Ubuntu)
@@ -52,6 +52,35 @@
   shell: |
     sudo dnf install nodejs -y
   when: ansible_distribution == "OracleLinux" and nodejs_rpm_repository.changed and 'installed' not in node
+
+
+- name: Install ansible across all remote systems(Ubuntu)
+  tags: ansible
+  apt:
+    name: ansible
+    state: present
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Install ansible across all remote systems(OracleLinux)
+  tags: ansible
+  shell: |
+    yes | sudo dnf install ansible-core
+  when: ansible_distribution == "OracleLinux"
+
+
+- name: Install java jdk 17 across all remote systems(Ubuntu)
+  tags: java-jdk
+  shell: |
+    yes | sudo apt-get install openjdk-17-jre-headless
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: Install java jdk 17 across all remote systems(OracleLinux)
+  tags: java-jdk
+  shell: |
+    yes | sudo dnf install fontconfig java-17-openjdk
+  when: ansible_distribution == "OracleLinux"
 
 
 - name: Check if docker script exists on the remote systems
