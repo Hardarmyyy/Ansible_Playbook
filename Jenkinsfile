@@ -28,7 +28,7 @@ pipeline {
 		 steps {
 			 ansiblePlaybook([ 
 			 inventory: 'inventory',
-			 playbook: 'install_servers.yml',
+			 playbook: 'uninstall_servers.yml',
 			 limit: 'node1',
 			 installation: 'ansible',
 			 colorized: true,
