@@ -116,6 +116,7 @@
     docker_script_file: "{{ 'docker.sh' if ansible_distribution == 'Ubuntu' else 'oracle_docker.sh'}}"
   when: not docker_file.stat.exists
 
+
 - name: Add the user to docker group to run docker commands without sudo
   tags: docker-scripts
   user:
@@ -126,3 +127,10 @@
     state: present
   when: not docker_file.stat.exists
   notify: Restart docker service
+
+
+- name: Allow permission for the docker group to run command
+  tags: docker
+  shell: chgrp docker /var/run/docker.sock && chmod 666 /var/run/docker.sock
+  notify: Restart docker service
+
