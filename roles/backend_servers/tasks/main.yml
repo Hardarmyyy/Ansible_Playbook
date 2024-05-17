@@ -1,13 +1,5 @@
 ---
 
-- name: Install pm2
-  tags: pm2
-  npm:
-    name: pm2
-    global: yes
-    state: present
-
-
 - name: Copy default html file for website(Ubuntu apache2)
   tags: copy-backend
   synchronize:
