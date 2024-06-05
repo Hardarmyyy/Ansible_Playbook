@@ -75,14 +75,14 @@ nano /etc/hosts # Open the hosts directory to map the ip addresses to the hostna
     192.168.100.70 node7
 ```
 
-👉7: On the control host machine (Ubuntu machine), ping each of the machines by their hostname or ip addresses to test the connection
+👉8: On the control host machine (Ubuntu machine), ping each of the machines by their hostname or ip addresses to test the connection
 
 ```bash
 ping -c 5 [hostname] or ping -c 5 [IP address]
 # EX: ping -c 5 node1 or ping -c 5 192.168.100.10
 ```
 
-👉8: Install openssh-server on each of the virtual machines to enable ssh communication
+👉9: Install openssh-server on each of the virtual machines to enable ssh communication
 
 ```bash
 # For ubuntu based linux systems
@@ -94,7 +94,7 @@ sudo dnf update
 sudo dnf install openssh-server -y 
 ```
 
-👉9: Ensure openssh-server is running on each of the virtual machines to enable ssh communication
+👉10: Ensure openssh-server is running on each of the virtual machines to enable ssh communication
 
 ```bash
 # For ubuntu based linux systems
@@ -106,7 +106,7 @@ sudo systemctl enable sshd
 sudo systemctl start sshd
 ```
 
-👉10: If firewall is installed, allow port for openssh-server on each of the virtual machines to enable ssh communication
+👉11: If firewall is installed, allow port for openssh-server on each of the virtual machines to enable ssh communication
 
 ```bash
 # For ubuntu based linux systems
@@ -120,7 +120,7 @@ sudo firewall-cmd --reload
 sudo firewall-cmd --list-all
 ```
 
-👉11: Create a consistent regular user on each of the virtual machines and add the user to the sudo group
+👉12: Create a consistent regular user on each of the virtual machines and add the user to the sudo group
 
 ```bash
 # For ubuntu based linux systems
@@ -138,7 +138,7 @@ sudo usermod -aG wheel <username>
 # EX: sudo usermod -aG wheel hardarmyyy
 ```
 
-👉12: On the control host (Ubuntu machine), create an ssh-key pair for ansible and copy to each of the remote machines to enable ssh communication between the control host and the remote machines
+👉13: On the control host (Ubuntu machine), create an ssh-key pair for ansible and copy to each of the remote machines to enable ssh communication between the control host and the remote machines
 
 ```bash
 ls -l .ssh # To see the list of ssh keys on the control host machine
@@ -150,7 +150,7 @@ ssh-copy-id -i ansbile.pub <remote ip address> or <remote hostname> # Copy the p
 # EX: ssh-copy-id -i ansbile.pub 192.168.100.10 or ssh-copy-id -i ansbile.pub node1
 ```
 
-👉13: On the control host (Ubuntu machine), test the ssh connection between the control host and the remote machines to ensure that it connects without password authentication
+👉14: On the control host (Ubuntu machine), test the ssh connection between the control host and the remote machines to ensure that it connects without password authentication
 
 ```bash
 ssh -i 'ansbile' <username>@<remote ip address> or <username>@<remote hostname> # Copy the public key to the remote machine
@@ -159,14 +159,14 @@ ssh -i 'ansbile' <username>@<remote ip address> or <username>@<remote hostname> 
 # Note: The first time ssh connection will ask password, other subsequent connections would allow connection without password authentication.
 ```
 
-👉14: On the control host (Ubuntu machine), Install ansible to run the playbook commands
+👉15: On the control host (Ubuntu machine), Install ansible to run the playbook commands
 
 ```bash
 sudo apt-get update
 sudo apt install ansible -y
 ```
 
-👉15: On the control host (Ubuntu machine), create a directory called ANSIBLE_PLAYBOOK and inside the directory create an inventory file to add the virtual machines by their hostname to the list of hosts
+👉16: On the control host (Ubuntu machine), create a directory called ANSIBLE_PLAYBOOK and inside the directory create an inventory file to add the virtual machines by their hostname to the list of hosts
 ```bash
 mkdir ANSIBLE_PLAYBOOK
 cd ANSIBLE_PLAYBOOK
@@ -195,7 +195,7 @@ node3
 node5
 ```
 
-👉16: On the control host (Ubuntu machine), inside the ANSIBLE_PLAYBOOK, create an ansible.cfg file to add the ansible configurations
+👉17: On the control host (Ubuntu machine), inside the ANSIBLE_PLAYBOOK, create an ansible.cfg file to add the ansible configurations
 ```bash
 cd ANSIBLE_PLAYBOOK
 touch ansible.cfg
@@ -207,7 +207,7 @@ private_key = ~/.ssh/ansible
 remote_user = <username of the regular user on the remote machine> # EX: remote_user = hardarmyyy
 ```
 
-👉17: On the control host (Ubuntu machine), inside the ANSIBLE_PLAYBOOK. Run an ansible command to gather facts from the remote machine
+👉18: On the control host (Ubuntu machine), inside the ANSIBLE_PLAYBOOK. Run an ansible command to gather facts from the remote machine
 
 ```bash
 cd ANSIBLE_PLAYBOOK
@@ -233,19 +233,19 @@ ansible-playbook install_servers.yml  # This will run the install_servers yaml f
  ####  Deploy frontend applications
 ```bash
 cd ANSIBLE_PLAYBOOK
-ansible-playbook deploy_frontend.yml  # This will run the install_servers yaml file to configure all the remote system whether Ubuntu or Oracle Linux
+ansible-playbook deploy_frontend.yml  # This will run the deploy-frontend yaml file to configure all the remote system whether Ubuntu or Oracle Linux
 ```
 
  ####  Deploy backend applications
 ```bash
 cd ANSIBLE_PLAYBOOK
-ansible-playbook deploy_backend.yml  # This will run the install_servers yaml file to configure all the remote system whether Ubuntu or Oracle Linux
+ansible-playbook deploy_backend.yml  # This will run the deploy_backend yaml file to configure all the remote system whether Ubuntu or Oracle Linux
 ```
 
  ####  Uninstall Servers and configuration
 ```bash
 cd ANSIBLE_PLAYBOOK
-ansible-playbook uninstall_servers.yml  # This will run the install_servers yaml file to configure all the remote system whether Ubuntu or Oracle Linux
+ansible-playbook uninstall_servers.yml  # This will run the uninstall_servers yaml file to configure all the remote system whether Ubuntu or Oracle Linux
 ```
 
 ---
